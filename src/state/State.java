@@ -1,11 +1,11 @@
 package state;
-import mda_efsm.MDA_EFSM;
 
+import mda_efsm.MDA_EFSM;
 import op.OP;
 
 public abstract class State {
-    MDA_EFSM mda;
-    OP op;
+    protected MDA_EFSM mda;
+    protected OP op;
 
     public void setMDA_EFSM(MDA_EFSM mda) {
         this.mda = mda;
@@ -15,7 +15,6 @@ public abstract class State {
         this.op = op;
     }
 
-    // Meta events to override in each concrete state
     public void create() {}
     public void insert_cups(int n) {}
     public void coin(int f) {}
