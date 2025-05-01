@@ -21,45 +21,46 @@ public class CoinsInserted extends State {
             op.DisposeAdditives(mda.A);
             mda.k -= 1;
 
-            op.ZeroCF(); // Reset credit after dispensing
-
+            op.ZeroCF();
             System.out.println("[Drink Served]: Remaining cups = " + mda.k);
-            if (mda.k == 0) {
+
+            if (mda.k <= 0) {
                 System.out.println("[Transition]: CoinsInserted -> NoCups (no cups left)");
-                mda.changeState(1); // Move to NoCups
+                mda.changeState(1); // NoCups
+            } else if (mda.k == 1) {
+                System.out.println("[Warning]: Only 1 cup left after this!");
+                System.out.println("[Transition]: CoinsInserted -> NoCups (low cups)");
+                mda.changeState(1); // NoCups for safety
             } else {
                 System.out.println("[Transition]: CoinsInserted -> Idle");
-                mda.changeState(2); // Move to Idle
+                mda.changeState(2); // Idle
             }
         } else {
             System.out.println("[Error]: No cups available to dispense drink.");
         }
     }
 
+
     @Override
     public void additives(int a) {
-        if (a >= 0 && a < mda.A.length) {
-            if (mda.A[a] == 0) {
-                mda.A[a] = 1;
-                op.DisposeAdditives(mda.A);
-                System.out.println("[Additive]: Added additive " + (a + 1));
-            } else {
-                System.out.println("[Additive]: Additive " + (a + 1) + " already added.");
-            }
+        if (a < 0 || a >= mda.A.length) {
+            System.out.println("[Error]: Invalid additive index.");
+            return;
+        }
+
+        if (mda.A[a] == 0) {
+            mda.A[a] = 1;
+            op.DisposeAdditives(mda.A);
+            System.out.println("[Additive]: Added additive " + (a + 1));
         } else {
-            System.out.println("[Error]: Invalid additive selected.");
+            System.out.println("[Additive]: Additive " + (a + 1) + " already added.");
         }
     }
 
     @Override
     public void coin(int f) {
-        DataStore ds = mda.getDataStore();
-
-        if (ds instanceof DS1) {
-            System.out.println("[CoinsInserted - VM1]: Additional coins not accepted. Please select drink or cancel.");
-        } else if (ds instanceof DS2) {
-            System.out.println("[CoinsInserted - VM2]: Returning extra coins.");
-            op.ReturnCoins();
-        }
+        // ✅ Consistent with NoCups behavior
+        System.out.println("[CoinsInserted]: Cannot accept more coins. Returning coin...");
+        op.ReturnCoins();
     }
 }
