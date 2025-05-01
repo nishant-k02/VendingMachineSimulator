@@ -34,4 +34,10 @@ public class VM2Factory extends AbstractFactory {
     public DisposeAdditives createDisposeAdditives() {
         return new DisposeAdditives2();
     }
+
+    @Override
+    public ZeroCF createZeroCF() {
+        return new ZeroCF2();
+    }
+
 }

@@ -20,7 +20,7 @@ public class VM1 {
 
     public void coin(float v) {
         ds.setTemp_v(v);
-        mda.coin(1);
+        mda.coin(v >= ds.getPrice() ? 1 : 0);
     }
 
     public void card(float x) {
@@ -52,4 +52,5 @@ public class VM1 {
     public void cancel() {
         mda.cancel();
     }
+
 }

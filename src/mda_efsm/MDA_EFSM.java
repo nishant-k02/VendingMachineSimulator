@@ -41,4 +41,9 @@ public class MDA_EFSM {
     public void disposeDrink(int d) { states[stateID].disposeDrink(d); }
     public void additives(int a) { states[stateID].additives(a); }
     public void cancel() { states[stateID].cancel(); }
+
+    public datastore.DataStore getDataStore() {
+        return states[stateID].op.getDataStore();
+    }
+
 }

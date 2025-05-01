@@ -10,4 +10,5 @@ public abstract class AbstractFactory {
     public abstract IncreaseCF createIncreaseCF();
     public abstract DisposeDrink createDisposeDrink();
     public abstract DisposeAdditives createDisposeAdditives();
+    public abstract ZeroCF createZeroCF();
 }

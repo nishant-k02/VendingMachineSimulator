@@ -1,207 +1,154 @@
 package Main;
 
 import java.util.Scanner;
-import vm.VM1;
-import vm.VM2;
-import factory.AbstractFactory;
-import factory.VM1Factory;
-import factory.VM2Factory;
-import mda_efsm.MDA_EFSM;
-import op.OP;
-import datastore.DataStore;
+import factory.*;
+import vm.*;
+import datastore.*;
+import op.*;
+import mda_efsm.*;
 
 public class Main {
-
-    static float currentCoins = 0;
-    static float currentPrice = 0;
-    static int cupsAvailable = 0;
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\n==========================================");
-        System.out.println(" Welcome to the Vending Machine Simulator ");
-        System.out.println("==========================================\n");
-
-        System.out.println("Select Vending Machine to Initialize:");
-        System.out.println("1. Vending Machine 1 (VM1)");
-        System.out.println("2. Vending Machine 2 (VM2)");
-        System.out.print("Enter 1 or 2: ");
+        System.out.println("======================================");
+        System.out.println("   Welcome to the Vending Machine");
+        System.out.println("======================================\n");
+        System.out.println("Select Vending Machine:");
+        System.out.println("1. VM1");
+        System.out.println("2. VM2");
+        System.out.print("Choice: ");
         int choice = sc.nextInt();
 
         if (choice == 1) {
-            runVM1(sc);
+            AbstractFactory af = new VM1Factory();
+            runVM(new VM1(initSystem(af), af.createDataStore()), sc, true);
         } else if (choice == 2) {
-            System.out.println("[VM2 not implemented yet. Focus is on VM1 based on State Diagram]");
+            AbstractFactory af = new VM2Factory();
+            runVM(new VM2(initSystem(af), af.createDataStore()), sc, false);
         } else {
-            System.out.println("Invalid Machine Selection. Program exiting.");
+            System.out.println("Invalid option.");
         }
 
         sc.close();
     }
 
-    private static void runVM1(Scanner sc) {
-        AbstractFactory af = new VM1Factory();
+    private static MDA_EFSM initSystem(AbstractFactory af) {
         DataStore ds = af.createDataStore();
         OP op = new OP();
         op.setDataStore(ds);
+        op.setAbstractFactory(af);
         op.setStorePrice(af.createStorePrice());
         op.setReturnCoins(af.createReturnCoins());
         op.setIncreaseCF(af.createIncreaseCF());
+        op.setZeroCF(af.createZeroCF());
         op.setDisposeDrink(af.createDisposeDrink());
         op.setDisposeAdditives(af.createDisposeAdditives());
-        MDA_EFSM mda = new MDA_EFSM(op);
-        VM1 vm1 = new VM1(mda, ds);
 
-        System.out.println("\nVending Machine-1 Initialized Successfully.");
+        return new MDA_EFSM(op);
+    }
 
-        char ch = '1';
+    private static void runVM(Object vm, Scanner sc, boolean isVM1) {
+        char ch = ' ';
         while (ch != 'q') {
-            System.out.println("\n==== VM1 MENU ====");
-            System.out.println("0. create(float)");
-            System.out.println("1. insert_cups(int)");
-            System.out.println("2. coin(float)");
-            System.out.println("3. card(float)");
-            System.out.println("4. set_price(float)");
-            System.out.println("5. sugar()");
-            System.out.println("6. chocolate()");
-            System.out.println("7. cappuccino()");
-            System.out.println("8. cancel()");
-            System.out.println("q. Quit");
-            System.out.println("===================");
-
+            displayMenu(isVM1);
             System.out.print("Select Operation: ");
             ch = sc.next().charAt(0);
 
-            switch (ch) {
-                case '0':
-                    System.out.print("Enter price: ");
-                    currentPrice = sc.nextFloat();
-                    vm1.create(currentPrice);
-                    currentCoins = 0;
-                    cupsAvailable = 0;
-                    System.out.println("[Action] Machine created with price: " + currentPrice);
-                    showStatus(mda);
-                    break;
+            try {
+                switch (ch) {
+                    case '0':
+                        System.out.print("Enter price: ");
+                        float p = sc.nextFloat();
+                        if (isVM1) ((VM1) vm).create(p);
+                        else ((VM2) vm).CREATE((int) p);
+                        break;
 
-                case '1':
-                    System.out.print("Enter number of cups: ");
-                    int n = sc.nextInt();
-                    vm1.insert_cups(n);
-                    cupsAvailable += n;
-                    System.out.println("[Action] Cups inserted: " + n);
-                    showStatus(mda);
-                    break;
+                    case '1':
+                        System.out.print("Enter coin value: ");
+                        float c = sc.nextFloat();
+                        if (isVM1) ((VM1) vm).coin(c);
+                        else ((VM2) vm).COIN((int) c);
+                        break;
 
-                case '2': // coin
-                    System.out.print("Enter coin value: ");
-                    float v = sc.nextFloat();
+                    case '2':
+                        if (isVM1) {
+                            ((VM1) vm).sugar();
+                        } else {
+                            ((VM2) vm).SUGAR();
+                        }
+                        break;
 
-                    if (getStateName(mda.getStateID()).equals("No Cups")) {
-                        // If in No Cups state -> only return coin
-                        vm1.coin(0);  // pass f=0, no IncreaseCF
-                        System.out.println("[Action] No cups available! Coin returned: " + v);
-                        // Don't update currentCoins
-                    } else {
-                        // Normal behavior in Idle or CoinsInserted
-                        vm1.coin(v >= currentPrice ? 1 : 0); // f=1 if enough
-                        currentCoins += v;
-                        System.out.println("[Action] Coin inserted: " + v);
-                    }
+                    case '3':
+                        if (isVM1) {
+                            ((VM1) vm).chocolate();
+                        } else {
+                            ((VM2) vm).CREAM();
+                        }
+                        break;
 
-                    showStatus(mda);
-                    break;
+                    case '4':
+                        if (isVM1) {
+                            ((VM1) vm).cappuccino();
+                        } else {
+                            ((VM2) vm).COFFEE();
+                        }
+                        break;
 
+                    case '5':
+                        System.out.print("Enter number of cups: ");
+                        int n = sc.nextInt();
+                        if (isVM1) ((VM1) vm).insert_cups(n);
+                        else ((VM2) vm).InsertCups(n);
+                        break;
 
-                case '3':
-                    System.out.print("Enter card value: ");
-                    float cardVal = sc.nextFloat();
-                    vm1.card(cardVal);
-                    currentCoins += cardVal;
-                    System.out.println("[Action] Card used with value: " + cardVal);
-                    showStatus(mda);
-                    break;
+                    case '6':
+                        System.out.print("Enter new price: ");
+                        float np = sc.nextFloat();
+                        if (isVM1) ((VM1) vm).set_price(np);
+                        else ((VM2) vm).SetPrice((int) np);
+                        break;
 
-                case '4':
-                    System.out.print("Enter new price: ");
-                    currentPrice = sc.nextFloat();
-                    vm1.set_price(currentPrice);
-                    System.out.println("[Action] Price updated to: " + currentPrice);
-                    showStatus(mda);
-                    break;
+                    case '7':
+                        if (isVM1) ((VM1) vm).cancel();
+                        else ((VM2) vm).CANCEL();
+                        break;
 
-                case '5':
-                    vm1.sugar();
-                    System.out.println("[Additive] Sugar Added.");
-                    showStatus(mda);
-                    break;
+                    case '8':
+                        if (isVM1) {
+                            System.out.print("Enter card value: ");
+                            float x = sc.nextFloat();
+                            ((VM1) vm).card(x);
+                        } else {
+                            System.out.println("[Card option not available in VM2]");
+                        }
+                        break;
 
-                case '6':
-                    if (checkTransaction(mda)) {
-                        vm1.chocolate();
-                        cupsAvailable--;
-                        currentCoins = 0;
-                        System.out.println("[Drink] Chocolate dispensed.");
-                    }
-                    showStatus(mda);
-                    break;
+                    case 'q':
+                        System.out.println("Exiting. Thank you!");
+                        break;
 
-                case '7':
-                    if (checkTransaction(mda)) {
-                        vm1.cappuccino();
-                        cupsAvailable--;
-                        currentCoins = 0;
-                        System.out.println("[Drink] Cappuccino dispensed.");
-                    }
-                    showStatus(mda);
-                    break;
-
-                case '8':
-                    vm1.cancel();
-                    System.out.println("[Cancel] Transaction canceled. Coins returned: " + currentCoins);
-                    currentCoins = 0;
-                    showStatus(mda);
-                    break;
-
-                case 'q':
-                    System.out.println("Exiting VM1. Thank you!");
-                    break;
-
-                default:
-                    System.out.println("[Error] Invalid operation. Try again.");
-                    break;
+                    default:
+                        System.out.println("Invalid input.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error executing operation: " + e.getMessage());
             }
         }
     }
 
-    private static boolean checkTransaction(MDA_EFSM mda) {
-        if (currentCoins < currentPrice) {
-            System.out.println("[Error] Not enough balance. Insert more coins/card.");
-            return false;
-        }
-        if (cupsAvailable <= 0) {
-            System.out.println("[Error] No cups available. Please insert cups.");
-            return false;
-        }
-        return true;
-    }
-
-    private static void showStatus(MDA_EFSM mda) {
-        System.out.println("--------------------------------------------");
-        System.out.println("State         : " + getStateName(mda.getStateID()));
-        System.out.println("Cups Available: " + cupsAvailable);
-        System.out.println("Current Coins : " + currentCoins);
-        System.out.println("Drink Price   : " + currentPrice);
-        System.out.println("--------------------------------------------");
-    }
-
-    private static String getStateName(int id) {
-        switch (id) {
-            case 0: return "Start";
-            case 1: return "No Cups";
-            case 2: return "Idle";
-            case 3: return "Coins Inserted";
-            default: return "Unknown";
-        }
+    private static void displayMenu(boolean isVM1) {
+        System.out.println("\n========== MENU ==========");
+        System.out.println("0. create(" + (isVM1 ? "float" : "int") + ")");
+        System.out.println("1. coin(" + (isVM1 ? "float" : "int") + ")");
+        System.out.println("2. " + (isVM1 ? "sugar()" : "SUGAR()"));
+        System.out.println("3. " + (isVM1 ? "chocolate()" : "CREAM()"));
+        System.out.println("4. " + (isVM1 ? "cappuccino()" : "COFFEE()"));
+        System.out.println("5. insert_cups(int)");
+        System.out.println("6. set_price(float/int)");
+        System.out.println("7. cancel()");
+        if (isVM1) System.out.println("8. card(float)");
+        System.out.println("q. Quit");
+        System.out.println("==========================");
     }
 }

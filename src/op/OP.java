@@ -3,6 +3,7 @@ package op;
 import datastore.DataStore;
 import op.strategies.*;
 
+
 public class OP {
     private DataStore d;
     private StorePrice storePrice;
@@ -10,9 +11,15 @@ public class OP {
     private IncreaseCF increaseCF;
     private DisposeDrink disposeDrink;
     private DisposeAdditives disposeAdditives;
+    private ZeroCF zeroCF;
+    private factory.AbstractFactory factory;  // optional, if needed
 
     public void setDataStore(DataStore d) {
         this.d = d;
+    }
+
+    public void setAbstractFactory(factory.AbstractFactory factory) {
+        this.factory = factory;
     }
 
     public void setStorePrice(StorePrice sp) {
@@ -33,6 +40,10 @@ public class OP {
 
     public void setDisposeAdditives(DisposeAdditives da) {
         this.disposeAdditives = da;
+    }
+
+    public void setZeroCF(ZeroCF zcf) {
+        this.zeroCF = zcf;
     }
 
     public void StorePrice() {
@@ -56,6 +67,11 @@ public class OP {
     }
 
     public void ZeroCF() {
-        d.setCF(0);
+        zeroCF.zeroCF(d);
     }
+
+    public DataStore getDataStore() {
+        return d;
+    }
+
 }

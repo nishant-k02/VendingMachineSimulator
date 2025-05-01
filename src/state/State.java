@@ -5,7 +5,7 @@ import op.OP;
 
 public abstract class State {
     protected MDA_EFSM mda;
-    protected OP op;
+    public OP op;
 
     public void setMDA_EFSM(MDA_EFSM mda) {
         this.mda = mda;

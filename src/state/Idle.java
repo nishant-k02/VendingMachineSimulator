@@ -23,8 +23,15 @@ public class Idle extends State {
             System.out.println("[Idle]: Coin inserted. Credit increased.");
         } else if (f == 1) {
             op.IncreaseCF();
-            System.out.println("[Transition]: Idle -> Coins Inserted");
-            mda.changeState(3); // Move to CoinsInserted
+            float cf = mda.getDataStore().getCF();        // get current credit
+            float price = mda.getDataStore().getPrice();  // get drink price
+
+            if (cf >= price) {
+                System.out.println("[Transition]: Idle -> Coins Inserted");
+                mda.changeState(3); // Move to CoinsInserted
+            } else {
+                System.out.println("[Idle]: Insufficient funds. Current CF: " + cf + ", Price: " + price);
+            }
         }
     }
 
