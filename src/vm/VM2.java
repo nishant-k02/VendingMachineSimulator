@@ -2,7 +2,6 @@ package vm;
 
 import datastore.*;
 import mda_efsm.MDA_EFSM;
-import op.OP;
 
 public class VM2 {
     private MDA_EFSM mda;
@@ -13,14 +12,14 @@ public class VM2 {
         this.ds = (DS2) ds; // Type cast to DS2
     }
 
-    public void CREATE(int p) {
-        ds.setTemp_p(p);
-        mda.create();
-    }
+//    public void CREATE(int p) {
+//        ds.setTemp_p((Object) p);
+//        mda.create();
+//    }
 
     public void COIN(int v) {
-        ds.setTemp_v(v);
-        mda.coin(v >= ds.getPrice() ? 1 : 0);
+        ds.setTemp_v((Object) v);
+        mda.coin(1);
     }
 
     public void InsertCups(int n) {
@@ -28,7 +27,7 @@ public class VM2 {
     }
 
     public void SetPrice(int p) {
-        ds.setTemp_p(p);
+        ds.setTemp_p((Object) p);
         mda.setPrice();
     }
 
@@ -47,4 +46,15 @@ public class VM2 {
     public void CANCEL() {
         mda.cancel();
     }
+
+    public void setTemp_p(int p) {
+        ds.setTemp_p((Object) p);
+    }
+
+    public void CREATE() {
+        mda.create();  // This will now use the temp_p already set
+    }
+
+
+
 }

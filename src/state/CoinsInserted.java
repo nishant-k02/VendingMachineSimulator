@@ -1,11 +1,16 @@
 package state;
 
+import datastore.DataStore;
+import datastore.DS1;
+import datastore.DS2;
+
 public class CoinsInserted extends State {
 
     @Override
     public void cancel() {
         op.ReturnCoins();
-        System.out.println("[Transition]: Coins Inserted -> Idle (cancelled)");
+        System.out.println("[Transition]: CoinsInserted -> Idle (cancelled)");
+        op.ZeroCF();
         mda.changeState(2); // Back to Idle
     }
 
@@ -14,11 +19,13 @@ public class CoinsInserted extends State {
         if (mda.k > 0) {
             op.DisposeDrink(d);
             op.DisposeAdditives(mda.A);
-            mda.k = mda.k - 1;
-            op.ZeroCF();
+            mda.k -= 1;
+
+            op.ZeroCF(); // Reset credit after dispensing
+
             System.out.println("[Drink Served]: Remaining cups = " + mda.k);
             if (mda.k == 0) {
-                System.out.println("[Transition]: CoinsInserted -> No Cups (no cups left)");
+                System.out.println("[Transition]: CoinsInserted -> NoCups (no cups left)");
                 mda.changeState(1); // Move to NoCups
             } else {
                 System.out.println("[Transition]: CoinsInserted -> Idle");
@@ -46,6 +53,13 @@ public class CoinsInserted extends State {
 
     @Override
     public void coin(int f) {
-        System.out.println("[CoinsInserted]: Additional coins not accepted. Please select drink or cancel.");
+        DataStore ds = mda.getDataStore();
+
+        if (ds instanceof DS1) {
+            System.out.println("[CoinsInserted - VM1]: Additional coins not accepted. Please select drink or cancel.");
+        } else if (ds instanceof DS2) {
+            System.out.println("[CoinsInserted - VM2]: Returning extra coins.");
+            op.ReturnCoins();
+        }
     }
 }

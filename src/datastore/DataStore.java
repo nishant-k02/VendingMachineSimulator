@@ -1,19 +1,15 @@
 package datastore;
 
-// Abstract class
 public abstract class DataStore {
-    public float temp_p;
-    public float temp_v;
-    public float price;
-    public float cf;
+    public abstract Object getTemp_p();
+    public abstract void setTemp_p(Object temp_p);
 
-    // Getter and setter methods
-    public abstract float getTemp_p();
-    public abstract void setTemp_p(float temp_p);
-    public abstract float getTemp_v();
-    public abstract void setTemp_v(float temp_v);
-    public abstract float getPrice();
-    public abstract void setPrice(float price);
-    public abstract float getCF();
-    public abstract void setCF(float cf);
+    public abstract Object getTemp_v();
+    public abstract void setTemp_v(Object temp_v);
+
+    public abstract Object getPrice();
+    public abstract void setPrice(Object price);
+
+    public abstract Object getCF();
+    public abstract void setCF(Object cf);
 }

@@ -5,6 +5,9 @@ import datastore.DataStore;
 public class IncreaseCF1 implements IncreaseCF {
     @Override
     public void increaseCF(DataStore d) {
-        d.setCF(d.getCF() + d.getTemp_v());
+        float current = (Float) d.getCF();
+        float value = (Float) d.getTemp_v();
+        d.setCF(current + value);
+        System.out.println("[IncreaseCF1]: CF increased to " + d.getCF());
     }
 }

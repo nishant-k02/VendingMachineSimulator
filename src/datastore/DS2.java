@@ -1,29 +1,42 @@
 package datastore;
 
-// Concrete DataStore for VM2
 public class DS2 extends DataStore {
+    private int temp_p;
+    private int temp_v;
+    private int price;
+    private int cf;
 
     @Override
-    public float getTemp_p() { return temp_p; }
+    public Object getTemp_p() {
+        System.out.println("[DEBUG - DS2]: getTemp_p called, returning " + temp_p);
+        return temp_p;
+    }
+
 
     @Override
-    public void setTemp_p(float temp_p) { this.temp_p = temp_p; }
+    public void setTemp_p(Object temp_p) {
+        this.temp_p = (Integer) temp_p;
+        System.out.println("[DEBUG - DS2]: temp_p set to " + this.temp_p);
+    }
+
 
     @Override
-    public float getTemp_v() { return temp_v; }
+    public Integer getTemp_v() { return temp_v; }
 
     @Override
-    public void setTemp_v(float temp_v) { this.temp_v = temp_v; }
+    public void setTemp_v(Object temp_v) { this.temp_v = (Integer) temp_v; }
 
     @Override
-    public float getPrice() { return price; }
+    public Integer getPrice() { return price; }
 
     @Override
-    public void setPrice(float price) { this.price = price; }
+    public void setPrice(Object price) { this.price = (Integer) price; }
 
     @Override
-    public float getCF() { return cf; }
+    public Integer getCF() { return cf; }
 
     @Override
-    public void setCF(float cf) { this.cf = cf; }
+    public void setCF(Object cf) { this.cf = (Integer) cf; }
+
+
 }

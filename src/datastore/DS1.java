@@ -1,29 +1,32 @@
 package datastore;
 
-// Concrete DataStore for VM1
 public class DS1 extends DataStore {
+    private float temp_p;
+    private float temp_v;
+    private float price;
+    private float cf;
 
     @Override
-    public float getTemp_p() { return temp_p; }
+    public Float getTemp_p() { return temp_p; }
 
     @Override
-    public void setTemp_p(float temp_p) { this.temp_p = temp_p; }
+    public void setTemp_p(Object temp_p) { this.temp_p = (Float) temp_p; }
 
     @Override
-    public float getTemp_v() { return temp_v; }
+    public Float getTemp_v() { return temp_v; }
 
     @Override
-    public void setTemp_v(float temp_v) { this.temp_v = temp_v; }
+    public void setTemp_v(Object temp_v) { this.temp_v = (Float) temp_v; }
 
     @Override
-    public float getPrice() { return price; }
+    public Float getPrice() { return price; }
 
     @Override
-    public void setPrice(float price) { this.price = price; }
+    public void setPrice(Object price) { this.price = (Float) price; }
 
     @Override
-    public float getCF() { return cf; }
+    public Float getCF() { return cf; }
 
     @Override
-    public void setCF(float cf) { this.cf = cf; }
+    public void setCF(Object cf) { this.cf = (Float) cf; }
 }
