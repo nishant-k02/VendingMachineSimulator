@@ -57,7 +57,23 @@ The system models a real-world vending machine using centralized finite state ma
 ### 🔧 Compile the Project
 
 ```bash
+cd 'Source Code'
+cd src
 javac Main/*.java datastore/*.java factory/*.java mda_efsm/*.java op/*.java op/strategies/*.java state/*.java vm/*.java
+```
+
+### 🔧 Run the Project
+
+```bash
+java Main.Main
+```
+
+### 🔧 Execute Jar File
+
+```bash
+cd 'Source Code'
+cd Executables
+java -jar VM_Project.jar
 ```
 
 ---
