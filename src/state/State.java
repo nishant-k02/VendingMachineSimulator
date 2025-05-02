@@ -3,6 +3,8 @@ package state;
 import mda_efsm.MDA_EFSM;
 import op.OP;
 
+// [STATE PATTERN] Abstract base class for states
+
 public abstract class State {
     protected MDA_EFSM mda;
     public OP op;

@@ -4,6 +4,8 @@ import datastore.DataStore;
 import datastore.DS1;
 import datastore.DS2;
 
+// [STATE PATTERN] Concrete State: Start
+
 public class Start extends State {
 
     @Override

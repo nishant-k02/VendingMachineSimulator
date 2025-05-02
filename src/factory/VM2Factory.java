@@ -3,6 +3,8 @@ package factory;
 import datastore.*;
 import op.strategies.*;
 
+// [ABSTRACT FACTORY PATTERN] Concrete Factory for VM2
+
 public class VM2Factory extends AbstractFactory {
 
     @Override

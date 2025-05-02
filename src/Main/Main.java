@@ -21,15 +21,18 @@ public class Main {
         int choice = sc.nextInt();
 
         if (choice == 1) {
+
+            // [ABSTRACT FACTORY PATTERN] Using factory to create VM instance
+
             AbstractFactory af = new VM1Factory();
-            DataStore ds = af.createDataStore();                // ✅ create once
-            MDA_EFSM mda = initSystem(af, ds);                  // ✅ pass into OP
-            runVM(new VM1(mda, ds), sc, true);                  // ✅ same ds in VM1
+            DataStore ds = af.createDataStore();
+            MDA_EFSM mda = initSystem(af, ds);
+            runVM(new VM1(mda, ds), sc, true);
         } else if (choice == 2) {
             AbstractFactory af = new VM2Factory();
-            DataStore ds = af.createDataStore();                // ✅ create once
-            MDA_EFSM mda = initSystem(af, ds);                  // ✅ pass into OP
-            runVM(new VM2(mda, ds), sc, false);                 // ✅ same ds in VM2
+            DataStore ds = af.createDataStore();
+            MDA_EFSM mda = initSystem(af, ds);
+            runVM(new VM2(mda, ds), sc, false);
         } else {
             System.out.println("Invalid option.");
         }
@@ -39,7 +42,7 @@ public class Main {
 
     private static MDA_EFSM initSystem(AbstractFactory af, DataStore ds) {
         OP op = new OP();
-        op.setDataStore(ds);                                   // ✅ use shared instance
+        op.setDataStore(ds);
         op.setAbstractFactory(af);
         op.setStorePrice(af.createStorePrice());
         op.setReturnCoins(af.createReturnCoins());

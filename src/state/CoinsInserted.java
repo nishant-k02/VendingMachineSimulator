@@ -4,6 +4,8 @@ import datastore.DataStore;
 import datastore.DS1;
 import datastore.DS2;
 
+// [STATE PATTERN] Concrete State: Coin Inserted
+
 public class CoinsInserted extends State {
 
     @Override
@@ -16,29 +18,28 @@ public class CoinsInserted extends State {
 
     @Override
     public void disposeDrink(int d) {
-        if (mda.k > 0) {
-            op.DisposeDrink(d);
-            op.DisposeAdditives(mda.A);
-            mda.k -= 1;
+        op.DisposeDrink(d);                 // Dispose selected drink
+        op.DisposeAdditives(mda.A);        // Add additives
+        op.ZeroCF();                        // Reset credit
 
-            op.ZeroCF();
-            System.out.println("[Drink Served]: Remaining cups = " + mda.k);
+        // ✅ RESET ADDITIVES after serving the drink
+        for (int i = 0; i < mda.A.length; i++) {
+            mda.A[i] = 0;
+        }
 
-            if (mda.k <= 0) {
-                System.out.println("[Transition]: CoinsInserted -> NoCups (no cups left)");
-                mda.changeState(1); // NoCups
-            } else if (mda.k == 1) {
-                System.out.println("[Warning]: Only 1 cup left after this!");
-                System.out.println("[Transition]: CoinsInserted -> NoCups (low cups)");
-                mda.changeState(1); // NoCups for safety
-            } else {
-                System.out.println("[Transition]: CoinsInserted -> Idle");
-                mda.changeState(2); // Idle
-            }
+        mda.k--;                            // Reduce cup count
+        System.out.println("[Drink Served]: Remaining cups = " + mda.k);
+
+        // ✅ Check for next state
+        if (mda.k <= 0) {
+            System.out.println("[Transition]: CoinsInserted -> NoCups (no cups left)");
+            mda.changeState(1);  // NoCups
         } else {
-            System.out.println("[Error]: No cups available to dispense drink.");
+            System.out.println("[Transition]: CoinsInserted -> Idle");
+            mda.changeState(2);  // Idle
         }
     }
+
 
 
     @Override

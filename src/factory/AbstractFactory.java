@@ -3,6 +3,8 @@ package factory;
 import datastore.DataStore;
 import op.strategies.*;
 
+// [ABSTRACT FACTORY PATTERN] Abstract Factory defining VM components
+
 public abstract class AbstractFactory {
     public abstract DataStore createDataStore();
     public abstract StorePrice createStorePrice();

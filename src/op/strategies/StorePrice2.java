@@ -2,6 +2,8 @@ package op.strategies;
 
 import datastore.DataStore;
 
+// [STRATEGY PATTERN] Concrete Strategy for VM1
+
 public class StorePrice2 implements StorePrice {
     @Override
     public void storePrice(DataStore d) {

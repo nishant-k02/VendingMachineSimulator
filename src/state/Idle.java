@@ -4,6 +4,8 @@ import datastore.DS1;
 import datastore.DS2;
 import datastore.DataStore;
 
+// [STATE PATTERN] Concrete State: Idle
+
 public class Idle extends State {
 
     @Override
@@ -38,7 +40,7 @@ public class Idle extends State {
         } else if (ds instanceof DS2) {
             cfInt = (Integer) ds.getCF();
             priceInt = (Integer) ds.getPrice();
-            System.out.printf("[DEBUG] VM2 - CF = %d, Price = %d%n", cfInt, priceInt);
+            System.out.printf("CF = %d, Price = %d%n", cfInt, priceInt);
             sufficient = cfInt >= priceInt;
         }
 

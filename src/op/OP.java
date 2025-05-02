@@ -3,16 +3,22 @@ package op;
 import datastore.DataStore;
 import op.strategies.*;
 
-
+// [STRATEGY PATTERN] OP acts as the Context class that uses strategy objects to perform operations
 public class OP {
     private DataStore d;
+
+    // [STRATEGY PATTERN] Strategy interfaces
     private StorePrice storePrice;
     private ReturnCoins returnCoins;
     private IncreaseCF increaseCF;
     private DisposeDrink disposeDrink;
     private DisposeAdditives disposeAdditives;
     private ZeroCF zeroCF;
-    private factory.AbstractFactory factory;  // optional, if needed
+
+    // [ABSTRACT FACTORY PATTERN] Optional reference to abstract factory
+    private factory.AbstractFactory factory;
+
+    // === Setters for Dependency Injection ===
 
     public void setDataStore(DataStore d) {
         this.d = d;
@@ -22,6 +28,7 @@ public class OP {
         this.factory = factory;
     }
 
+    // [STRATEGY PATTERN] Inject different strategy implementations
     public void setStorePrice(StorePrice sp) {
         this.storePrice = sp;
     }
@@ -46,6 +53,9 @@ public class OP {
         this.zeroCF = zcf;
     }
 
+    // === Delegate behavior to strategies ===
+
+    // [STRATEGY PATTERN] Delegates to StorePrice strategy
     public void StorePrice() {
         storePrice.storePrice(d);
     }
@@ -73,5 +83,4 @@ public class OP {
     public DataStore getDataStore() {
         return d;
     }
-
 }
